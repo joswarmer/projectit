@@ -18,7 +18,7 @@ jobs:
       
     - uses: MrBoolean/action-lerna@master
     - name: Lerna bootstrap
-      run: lerna bootstrap
+      run: bootstrap
 
       env:
         CI: true
