@@ -21,12 +21,15 @@ jobs:
     - uses: actions/setup-node@master
     - name: Lerna install
       run: | 
-        echo Lerna install
+        echo JOS Lerna install
         npm i -g lerna
+        echo JOS lerna bootstrap
         lerna bootstrap
+        echo JOS npm -i -g yarn
         npm -i -g yarn
+        echo JOS yarn install
         yarn install
-        echo build it
+        echo Jos build it
         lerna run build
       env:
         CI: true
