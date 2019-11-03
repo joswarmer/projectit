@@ -19,15 +19,6 @@ jobs:
     - uses: MrBoolean/action-lerna@master
     - name: Lerna bootstrap
       run: lerna bootstrap
-      
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm ci
-        npm run build --if-present
-        npm test
+
       env:
         CI: true
