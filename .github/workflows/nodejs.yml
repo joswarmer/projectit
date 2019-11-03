@@ -17,11 +17,13 @@ jobs:
       run: echo git checkout
           git checkout feature/meta-model-generator
       
-    - uses: actions/npm@master
+    - uses: actions/setup-node@master
     - name: Lerna install
       run: 
         echo Lerna install
         npm i -g lerna
         lerna bootstrap
+        npm -i -g yarn
+        yarn install
       env:
         CI: true
