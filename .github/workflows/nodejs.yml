@@ -16,9 +16,10 @@ jobs:
     - name: checkout branch feature/meta-model-generator
       run: git checkout feature/meta-model-generator
       
-    - uses: MrBoolean/action-lerna@master
-    - name: Lerna bootstrap
-      run: bootstrap
-
+    - uses: actions/npm@master
+    - name: Lerna install
+      run: 
+        npm i -g lerna
+        lerna bootstrap
       env:
         CI: true
