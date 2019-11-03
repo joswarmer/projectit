@@ -17,7 +17,7 @@ jobs:
       run: git checkout feature/meta-model-generator
       
     - uses: MrBoolean/action-lerna@feature/meta-model-generator
-      name: Lerna bootstrap
+    - name: Lerna bootstrap
       run: lerna bootstrap
       
     - name: Use Node.js ${{ matrix.node-version }}
