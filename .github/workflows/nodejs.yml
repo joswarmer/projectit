@@ -23,7 +23,7 @@ jobs:
       run: | 
         echo JOS Lerna install
         npm i -g lerna
-        npm -i -g yarn
+        npm i -g yarn
         echo JOS lerna bootstrap
         lerna bootstrap
         echo JOS yarn install
