@@ -9,12 +9,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [8.12.0]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@feature/meta-model-generator
+    - name: checkout branch feature/meta-model-generator
+      run: git checkout feature/meta-model-generator
+      
+    - uses: MrBoolean/action-lerna@feature/meta-model-generator
+      name: Lerna bootstrap
+      run: lerna bootstrap
+      
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@feature/meta-model-generator
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
