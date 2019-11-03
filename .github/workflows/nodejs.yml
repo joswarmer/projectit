@@ -12,16 +12,16 @@ jobs:
         node-version: [8.12.0]
 
     steps:
-    - uses: actions/checkout@feature/meta-model-generator
+    - uses: actions/checkout@master
     - name: checkout branch feature/meta-model-generator
       run: git checkout feature/meta-model-generator
       
-    - uses: MrBoolean/action-lerna@feature/meta-model-generator
+    - uses: MrBoolean/action-lerna@master
     - name: Lerna bootstrap
       run: lerna bootstrap
       
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@feature/meta-model-generator
+      uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
