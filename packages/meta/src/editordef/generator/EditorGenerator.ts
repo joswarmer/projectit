@@ -1,4 +1,4 @@
-import { DefEditorLanguage } from "../metalanguage";
+import { DefEditorChecker, DefEditorLanguage } from "../metalanguage";
 import { PiLanguageUnit } from "../../languagedef/metalanguage";
 import * as fs from "fs";
 import { Names, Helpers, EDITOR_GEN_FOLDER, EDITOR_FOLDER, LANGUAGE_UTILS_GEN_FOLDER } from "../../utils";
@@ -13,6 +13,8 @@ import {
     SelectionHelpers,
     UnparserTemplate
 } from "./templates";
+import { DeafultActionsTemplate } from "./templates/DeafultActionsTemplate";
+import { ManualActionsTemplate } from "./templates/ManualActionsTemplate";
 
 const LOGGER = new PiLogger("EditorGenerator").mute();
 
@@ -31,17 +33,31 @@ export class EditorGenerator {
         this.editorGenFolder = this.outputfolder + "/" + EDITOR_GEN_FOLDER;
         this.utilsGenFolder = this.outputfolder + "/" + LANGUAGE_UTILS_GEN_FOLDER;
         let name = editDef ? editDef.name : "";
-        LOGGER.log("Generating editor '" + name + "' in folder " + this.editorGenFolder);
+        console.log("Generating editor '" + name + "' in folder " + this.editorGenFolder+ " for language "+ this.language?.name);
 
         if (editDef === null || editDef === undefined) {
             editDef = new DefEditorLanguage();
-        }
+            editDef.name = "default";
+            editDef.languageName = this.language.name;
+            editDef.language = this.language;
+            console.log("New editordef "+ editDef.name + " for language "+ editDef.language?.name);
+            // For a parsed file checking has been done by the parser.
+            // For e new one we need to do it here.
+            const checker = new DefEditorChecker(this.language);
+            checker.check(editDef);
+            if (checker.hasErrors()) {
+                checker.errors.forEach(error => LOGGER.error(this, error));
+                throw new Error("checking errors."); // error message
+            }
+            }
         // TODO editDef.language moet veel eerder gezet worden, want anders werken de checks niet, b.v. op concept references
         // waarom wordt dit hier gezet, terwijl in Checker al resolveReferences wordt gebruikt?????
         editDef.language = this.language;
         // fill default values if they are not there
         editDef.addDefaults();
 
+        const defaultActions = new DeafultActionsTemplate();
+        const manualActions = new ManualActionsTemplate();
         const actions = new ActionsTemplate();
         const projection = new ProjectionTemplate();
 
@@ -70,7 +86,7 @@ export class EditorGenerator {
         fs.writeFileSync(`${this.editorGenFolder}/${Names.selectionHelpers(this.language)}.ts`, enumProjectionFile);
 
         LOGGER.log(`Generating default actions: ${Names.defaultActions(this.language)}.ts`);
-        var defaultActionsFile = Helpers.pretty(actions.generateDefaultActions(this.language, editDef, relativePath), "DefaultActions");
+        var defaultActionsFile = Helpers.pretty(defaultActions.generate(this.language, editDef, relativePath), "DefaultActions");
         fs.writeFileSync(`${this.editorGenFolder}/${Names.defaultActions(this.language)}.ts`, defaultActionsFile);
 
         LOGGER.log(`Generating context: ${Names.context(this.language)}.ts`);
@@ -94,11 +110,11 @@ export class EditorGenerator {
 
         // the following do not need the relativePath for imports
         LOGGER.log(`Generating manual actions: ${Names.manualActions(this.language)}.ts`);
-        var manualActionsFile = Helpers.pretty(actions.generateManualActions(this.language, editDef), "ManualActions");
+        var manualActionsFile = Helpers.pretty(manualActions.generate(this.language, editDef), "ManualActions");
         Helpers.generateManualFile(`${this.editorFolder}/${Names.manualActions(this.language)}.ts`, manualActionsFile, "ManualActions");
 
         LOGGER.log(`Generating actions: ${Names.actions(this.language)}.ts`);
-        var actionsFile = Helpers.pretty(actions.generateActions(this.language, editDef), "Actions");
+        var actionsFile = Helpers.pretty(actions.generate(this.language, editDef), "Actions");
         fs.writeFileSync(`${this.editorGenFolder}/${Names.actions(this.language)}.ts`, actionsFile);
 
         LOGGER.log(`Generating language unparser: ${Names.unparser(this.language)}.ts`);
