@@ -3,6 +3,7 @@ import { PiLanguageUnit } from "../../languagedef/metalanguage";
 import * as fs from "fs";
 import { Names, Helpers, EDITOR_GEN_FOLDER, EDITOR_FOLDER, LANGUAGE_UTILS_GEN_FOLDER } from "../../utils";
 import { PiLogger } from "../../../../core/src/util/PiLogging";
+import { DefEditorDefaults } from "../metalanguage/DefEditorDefaults";
 import {
     ActionsTemplate,
     ContextTemplate,
@@ -26,35 +27,24 @@ export class EditorGenerator {
     protected editorFolder: string;
     language: PiLanguageUnit;
 
-    constructor() {}
+    constructor() {
+    }
 
     generate(editDef: DefEditorLanguage): void {
         this.editorFolder = this.outputfolder + "/" + EDITOR_FOLDER;
         this.editorGenFolder = this.outputfolder + "/" + EDITOR_GEN_FOLDER;
         this.utilsGenFolder = this.outputfolder + "/" + LANGUAGE_UTILS_GEN_FOLDER;
         let name = editDef ? editDef.name : "";
-        console.log("Generating editor '" + name + "' in folder " + this.editorGenFolder+ " for language "+ this.language?.name);
+        LOGGER.log("Generating editor '" + name + "' in folder " + this.editorGenFolder + " for language " + this.language?.name);
 
         if (editDef === null || editDef === undefined) {
             editDef = new DefEditorLanguage();
             editDef.name = "default";
             editDef.languageName = this.language.name;
             editDef.language = this.language;
-            console.log("New editordef "+ editDef.name + " for language "+ editDef.language?.name);
-            // For a parsed file checking has been done by the parser.
-            // For e new one we need to do it here.
-            const checker = new DefEditorChecker(this.language);
-            checker.check(editDef);
-            if (checker.hasErrors()) {
-                checker.errors.forEach(error => LOGGER.error(this, error));
-                throw new Error("checking errors."); // error message
-            }
-            }
-        // TODO editDef.language moet veel eerder gezet worden, want anders werken de checks niet, b.v. op concept references
-        // waarom wordt dit hier gezet, terwijl in Checker al resolveReferences wordt gebruikt?????
-        editDef.language = this.language;
+        }
         // fill default values if they are not there
-        editDef.addDefaults();
+        DefEditorDefaults.addDefaults(editDef);
 
         const defaultActions = new DeafultActionsTemplate();
         const manualActions = new ManualActionsTemplate();
