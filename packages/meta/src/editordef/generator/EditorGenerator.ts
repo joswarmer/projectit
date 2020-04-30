@@ -15,6 +15,7 @@ import {
     UnparserTemplate
 } from "./templates";
 import { DeafultActionsTemplate } from "./templates/DeafultActionsTemplate";
+import { InitalizationTemplate } from "./templates/InitializationTemplate";
 import { ManualActionsTemplate } from "./templates/ManualActionsTemplate";
 
 const LOGGER = new PiLogger("EditorGenerator").mute();
@@ -57,6 +58,7 @@ export class EditorGenerator {
         const editorTemplate = new EditorTemplate();
         const editorIndexTemplate = new EditorIndexTemplate();
         const unparserTemplate = new UnparserTemplate();
+        const initializationTemplate = new InitalizationTemplate();
 
         //Prepare folders
         Helpers.createDirIfNotExisting(this.editorFolder);
@@ -102,6 +104,10 @@ export class EditorGenerator {
         LOGGER.log(`Generating manual actions: ${Names.manualActions(this.language)}.ts`);
         var manualActionsFile = Helpers.pretty(manualActions.generate(this.language, editDef), "ManualActions");
         Helpers.generateManualFile(`${this.editorFolder}/${Names.manualActions(this.language)}.ts`, manualActionsFile, "ManualActions");
+
+        LOGGER.log(`Generating initialization: ${Names.initialization(this.language)}.ts`);
+        var initializationFile = Helpers.pretty(initializationTemplate.generate(this.language), "Initialization");
+        Helpers.generateManualFile(`${this.editorFolder}/${Names.initialization(this.language)}.ts`, initializationFile, "Initialization");
 
         LOGGER.log(`Generating actions: ${Names.actions(this.language)}.ts`);
         var actionsFile = Helpers.pretty(actions.generate(this.language, editDef), "Actions");
