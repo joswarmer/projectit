@@ -227,11 +227,13 @@ export class ProjectionTemplate {
             }
             line.items.forEach((item, itemIndex) => {
                 if ( item instanceof DefEditorProjectionText ){
-                    result += `
-                        new LabelBox(element, "${c.name}-name-${index}-${itemIndex}", "${item.text}", {
-                            style: projectitStyles.propertykeyword,
+                    result += ` new LabelBox(element, "${c.name}-name-${index}-${itemIndex}", "${item.text}", {
+                            style: projectitStyles.${item.style},
                             selectable: false
-                        }),`
+                        })  `
+                    if( itemIndex < line.items.length-1 ){
+                        result += ",";
+                    }
                 } else if( item instanceof DefEditorSubProjection){
                     const appliedFeature: PiProperty = item.expression.appliedfeature.referedElement.referred;
                     if (appliedFeature instanceof PiPrimitiveProperty){

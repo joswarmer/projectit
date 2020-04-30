@@ -51,9 +51,23 @@ export class DefEditorDefaults {
                 coneditor.projection = new MetaEditorProjection();
                 coneditor.projection.name = "default";
                 coneditor.projection.conceptEditor = coneditor;
-                for (let prop of con.allPrimProperties()) {
+                const startLine = new MetaEditorProjectionLine();
+                const text = DefEditorProjectionText.create(con.name);
+                text.style = "conceptkeyword";
+                startLine.items.push(text);
+                // find name property is available
+                const nameProp = con.allPrimProperties().find(p => p.name === "name" && p.primType === "string");
+                if (!!nameProp) {
+                    const exp = PiLangSelfExp.create(con);
+                    exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, nameProp.name, nameProp);
+                    const sub = new DefEditorSubProjection();
+                    sub.expression = exp;
+                    startLine.items.push(sub);
+                }
+                coneditor.projection.lines.push(startLine);
+                for (let prop of con.allPrimProperties().filter((p => p !== nameProp))) {
                     const line = new MetaEditorProjectionLine();
-                    line.indent = 0;
+                    line.indent = 4;
                     line.items.push(DefEditorProjectionText.create(prop.name));
                     const exp = PiLangSelfExp.create(con);
                     exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
@@ -83,7 +97,7 @@ export class DefEditorDefaults {
 
     private static defaultSingleConceptProperty(concept: PiConcept, prop: PiConceptProperty, coneditor: DefEditorConcept) {
         const line = new MetaEditorProjectionLine();
-        line.indent = 0;
+        line.indent = 4;
         line.items.push(DefEditorProjectionText.create(prop.name));
         const exp = PiLangSelfExp.create(concept);
         exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
@@ -100,9 +114,9 @@ export class DefEditorDefaults {
     private static defaultListConceptProperty(concept: PiConcept, prop: PiConceptProperty, coneditor: DefEditorConcept) {
         const line1 = new MetaEditorProjectionLine();
         const line2 = new MetaEditorProjectionLine();
-        line1.indent = 0;
+        line1.indent = 4;
         line1.items.push(DefEditorProjectionText.create(prop.name));
-        line2.indent = 4;
+        line2.indent = 8;
         const exp = PiLangSelfExp.create(concept);
         exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
         const sub = new DefEditorSubProjection();

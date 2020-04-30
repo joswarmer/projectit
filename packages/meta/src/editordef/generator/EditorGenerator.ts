@@ -41,8 +41,8 @@ export class EditorGenerator {
             editDef = new DefEditorLanguage();
             editDef.name = "default";
             editDef.languageName = this.language.name;
-            editDef.language = this.language;
         }
+        editDef.language = this.language;
         // fill default values if they are not there
         DefEditorDefaults.addDefaults(editDef);
 
