@@ -246,7 +246,7 @@ export class ProjectionTemplate {
                                 result += this.conceptPartListProjection(direction, appliedFeature)+ ",";
 
                             } else {
-                                result += `this.rootProjection.getBox(element.${appliedFeature.name}),`
+                                result += `((!!element.${appliedFeature.name}) ? this.rootProjection.getBox(element.${appliedFeature.name}) : new AliasBox(element, "new-${appliedFeature.name}", "add ${appliedFeature.name}" )),`
                             }
                         } else { // reference
                             if( appliedFeature.isList){

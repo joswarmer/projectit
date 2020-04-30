@@ -69,7 +69,7 @@ export class DeafultActionsTemplate {
             ];
             
             export const CUSTOM_BEHAVIORS: PiCustomBehavior[] = [
-                ${flatten(language.concepts.map(c => c.parts())).filter(p => p.isList).map(part => {
+                ${flatten(language.concepts.map(c => c.parts())).map(part => {
                     const parentConcept = part.owningConcept;
                     const partConcept = part.type.referred;
                     return `${LangUtil.subClasses(partConcept).filter(cls => !cls.isAbstract).map(subClass => 
@@ -79,7 +79,7 @@ export class DeafultActionsTemplate {
                             action: (box: Box, trigger: PiTriggerType, ed: PiEditor): PiElement | null => {
                                 var parent: ${Names.classifier(parentConcept)} = box.element as ${Names.classifier(parentConcept)};
                                 const new${part.name}: ${Names.concept(subClass)} = new ${Names.concept(subClass)}();
-                                parent.${part.name}.push(new${part.name});
+                                ${part.isList ? `parent.${part.name}.push(new${part.name});` : `parent.${part.name}= new${part.name};`}
                                 return new${part.name};
                             },
                             boxRoleToSelect: "${part.name}-name"
@@ -126,3 +126,4 @@ export class DeafultActionsTemplate {
             `;
         }
 }
+
