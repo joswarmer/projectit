@@ -117,7 +117,7 @@ export class ConceptTemplate {
                 ${predefInstances}
                 ${concept.implementedPrimProperties().map(p => this.generatePrimitiveProperty(p)).join("")}
                 ${concept.implementedParts().map(p => this.generatePartProperty(p)).join("")}
-                ${concept.implementedPReferences().map(p => this.generateReferenceProperty(p)).join("")}
+                ${concept.implementedReferences().map(p => this.generateReferenceProperty(p)).join("")}
 
                 ${extrasForLimitedConcept}
                 
@@ -230,14 +230,18 @@ export class ConceptTemplate {
                 switch(v) {
                     ${limitedConcept.instances.map(predef => `case "${predef.name}":
                     if (this.${predef.name} !== null) {
-                        return new ${conceptName}("${predef.name}");
+                        let predef = new ${conceptName}();                  
+                        predef.name = "${predef.name}";
+                        return predef;
                     } else {
                         return ${conceptName}.${predef.name};
                     }`
         ).join(";")}
                     default:
                     if (this.$piANY !== null) {
-                        return new ${conceptName}("$piANY");
+                        let predef = new ${conceptName}();                  
+                        predef.name = "$piANY";
+                        return predef;
                     } else {
                         return ${conceptName}.$piANY;
                     }
