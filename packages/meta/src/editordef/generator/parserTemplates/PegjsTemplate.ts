@@ -7,7 +7,7 @@ import {
     PiPrimitiveProperty,
     PiProperty
 } from "../../../languagedef/metalanguage/PiLanguage";
-import { ListJoin, ListJoinType, PiEditConcept, PiEditProjectionText, PiEditSubProjection, PiEditUnit } from "../../metalanguage";
+import { ListJoin, ListJoinType, PiEditConcept, PiEditProjectionText, PiEditPropertyProjection, PiEditUnit } from "../../metalanguage";
 import { findAllImplementorsAndSubs, Names } from "../../../utils";
 
 // TODO add support for expressions in the parser
@@ -126,7 +126,7 @@ HEXDIG = [0-9a-f]
 
             conceptDef.projection.lines.forEach(l => {
                 l.items.forEach(item => {
-                    if (item instanceof PiEditSubProjection) {
+                    if (item instanceof PiEditPropertyProjection) {
                         propsToSet.push(item.expression.findRefOfLastAppliedFeature())
                     }
                 });
@@ -138,7 +138,7 @@ HEXDIG = [0-9a-f]
                     `${(item instanceof PiEditProjectionText) ?
                         `\"${item.text.trim()}\" ws `
                         :
-                        `${(item instanceof PiEditSubProjection) ?
+                        `${(item instanceof PiEditPropertyProjection) ?
                             `${this.makeSubProjectionRule(item)} ws `
                             :
                             ``}`
@@ -147,7 +147,7 @@ HEXDIG = [0-9a-f]
         }
     }
 
-    private makeSubProjectionRule(item: PiEditSubProjection): string {
+    private makeSubProjectionRule(item: PiEditPropertyProjection): string {
         const myElem = item.expression.findRefOfLastAppliedFeature();
         if (myElem.isList) {
             this.listNumber++;
@@ -213,7 +213,7 @@ HEXDIG = [0-9a-f]
     { return creator.create${myName}Reference({name: name}); }\n`;
     }
 
-    private makeRuleForList(item: PiEditSubProjection, myElem: PiProperty, listRuleName: string) {
+    private makeRuleForList(item: PiEditPropertyProjection, myElem: PiProperty, listRuleName: string) {
         let typeName: string = '';
         if (myElem instanceof PiPrimitiveProperty) {
             // TODO make a difference between variables and stringLiterals

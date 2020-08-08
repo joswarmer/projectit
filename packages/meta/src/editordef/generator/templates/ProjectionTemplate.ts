@@ -13,7 +13,7 @@ import {
     PiEditUnit,
     PiEditProjection,
     PiEditProjectionText,
-    PiEditSubProjection, PiEditProjectionDirection, PiEditParsedProjectionIndent
+    PiEditPropertyProjection, PiEditProjectionDirection, PiEditParsedProjectionIndent, PiEditSubProjection
 } from "../../metalanguage";
 
 export class ProjectionTemplate {
@@ -167,7 +167,7 @@ export class ProjectionTemplate {
                     if( itemIndex < line.items.length-1 ){
                         result += ",";
                     }
-                } else if( item instanceof PiEditSubProjection){
+                } else if( item instanceof PiEditPropertyProjection){
                     const appliedFeature: PiProperty = item.expression.appliedfeature.referredElement.referred;
                     if (appliedFeature instanceof PiPrimitiveProperty){
                         result += this.primitivePropertyProjection(appliedFeature, element);
@@ -195,6 +195,13 @@ export class ProjectionTemplate {
                     }
                     if(itemIndex !== line.items.length -1 ){
                         result += ", "
+                    }
+                } else if( item instanceof PiEditSubProjection){
+                    result += ` new LabelBox(${element}, "${element}-label-line-${index}-item-${itemIndex}", "OPTIONAL ${item.optional}", {
+                            selectable: false
+                        })  `
+                    if( itemIndex < line.items.length-1 ){
+                        result += ",";
                     }
                 }
             });

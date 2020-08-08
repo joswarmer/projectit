@@ -11,7 +11,7 @@ import {
     PiEditConcept,
     PiEditUnit,
     PiEditProjectionText,
-    PiEditSubProjection,
+    PiEditPropertyProjection,
     PiEditProjectionDirection,
     ListJoinType,
     PiEditProjectionLine
@@ -253,7 +253,7 @@ export class UnparserTemplate {
             if (item instanceof PiEditProjectionText) {
                 // TODO escape all quotes in the text string
                 result += `this.output[this.currentIndex] += \`${item.text.trimRight()} \`;\n`;
-            } else if (item instanceof PiEditSubProjection) {
+            } else if (item instanceof PiEditPropertyProjection) {
                 let myElem = item.expression.findRefOfLastAppliedFeature();
                 if (myElem instanceof PiPrimitiveProperty) {
                     result += this.makeItemWithPrimitiveType(myElem, item);
@@ -265,7 +265,7 @@ export class UnparserTemplate {
         return result;
     }
 
-    private makeItemWithPrimitiveType(myElem: PiPrimitiveProperty, item: PiEditSubProjection): string {
+    private makeItemWithPrimitiveType(myElem: PiPrimitiveProperty, item: PiEditPropertyProjection): string {
         // the expression is of primitive type
         let result: string = ``;
         const elemStr = langExpToTypeScript(item.expression);
@@ -287,7 +287,7 @@ export class UnparserTemplate {
         return result + ";\n";
     }
 
-    private makeItemWithConceptType(myElem: PiProperty, item: PiEditSubProjection, indent: number) {
+    private makeItemWithConceptType(myElem: PiProperty, item: PiEditPropertyProjection, indent: number) {
         // the expression has a concept as type, thus we need to call its unparse method
         let result: string = "";
         let type = myElem.type.referred;

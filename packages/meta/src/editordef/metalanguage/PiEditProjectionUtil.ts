@@ -4,7 +4,7 @@ import { PiBinaryExpressionConcept, PiConcept, PiConceptProperty } from "../../l
 import { PiEditUnit, PiEditConcept, PiEditParsedProjectionIndent, PiEditParsedNewline } from "./PiEditDefLang";
 import {
     PiEditProjectionText,
-    PiEditSubProjection, PiEditProjectionDirection, ListJoin, ListJoinType,
+    PiEditPropertyProjection, PiEditProjectionDirection, ListJoin, ListJoinType,
     PiEditProjection,
     PiEditProjectionLine
 } from "./PiEditDefLang";
@@ -64,7 +64,7 @@ export class PiEditProjectionUtil {
                 if (!!nameProp) {
                     const exp = PiLangSelfExp.create(con);
                     exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, nameProp.name, nameProp);
-                    const sub = new PiEditSubProjection();
+                    const sub = new PiEditPropertyProjection();
                     sub.expression = exp;
                     startLine.items.push(sub);
                 }
@@ -75,7 +75,7 @@ export class PiEditProjectionUtil {
                     line.items.push(PiEditProjectionText.create(prop.name));
                     const exp = PiLangSelfExp.create(con);
                     exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
-                    const sub = new PiEditSubProjection();
+                    const sub = new PiEditPropertyProjection();
                     sub.expression = exp;
                     line.items.push(sub);
                     coneditor.projection.lines.push(line);
@@ -105,7 +105,7 @@ export class PiEditProjectionUtil {
         line.items.push(PiEditProjectionText.create(prop.name));
         const exp = PiLangSelfExp.create(concept);
         exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
-        const sub = new PiEditSubProjection();
+        const sub = new PiEditPropertyProjection();
         sub.expression = exp;
         sub.listJoin = new ListJoin();
         sub.listJoin.direction = PiEditProjectionDirection.Vertical;
@@ -123,7 +123,7 @@ export class PiEditProjectionUtil {
         line2.indent = 8;
         const exp = PiLangSelfExp.create(concept);
         exp.appliedfeature = PiLangAppliedFeatureExp.create(exp, prop.name, prop);
-        const sub = new PiEditSubProjection();
+        const sub = new PiEditPropertyProjection();
         sub.expression = exp;
         sub.listJoin = new ListJoin();
         sub.listJoin.direction = PiEditProjectionDirection.Vertical;

@@ -117,7 +117,7 @@ export class ListJoin {
     }
 }
 
-export class PiEditSubProjection {
+export class PiEditPropertyProjection {
     location: ParseLocation;
     propertyName: string = "";
     listJoin: ListJoin;
@@ -135,7 +135,13 @@ export class PiEditSubProjection {
     }
 }
 
-type PiEditProjectionItem = PiEditParsedProjectionIndent | PiEditProjectionText | PiEditSubProjection;
+export class PiEditSubProjection {
+    location: ParseLocation;
+    optional: boolean;
+    items: PiEditProjectionItem[];
+}
+
+type PiEditProjectionItem = PiEditParsedProjectionIndent | PiEditProjectionText | PiEditPropertyProjection | PiEditSubProjection;
 
 export class PiEditProjectionLine {
     location: ParseLocation;
@@ -160,7 +166,7 @@ export class PiEditProjection {
     cursorLocation(): string {
         for (let line of this.lines) {
             for (let item of line.items) {
-                if (item instanceof PiEditSubProjection) {
+                if (item instanceof PiEditPropertyProjection) {
                     return Roles.property(item.expression.appliedfeature.referredElement.referred);
                     // const referred: PiProperty = item.expression.appliedfeature.referredElement.referred;
                     // if (referred.type.referred instanceof PiExpressionConcept) {
