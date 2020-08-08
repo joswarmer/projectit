@@ -151,7 +151,7 @@ export class DefaultActionsTemplate {
                             return newExpression;
                         },
                         boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 2 */
-                    },`).join(",\n")}
+                    },`).join("\n")}
                     `
             if (childConcept instanceof PiConcept) {
                 const conceptEditor = editorDef.findConceptEditor(childConcept);
@@ -168,7 +168,7 @@ export class DefaultActionsTemplate {
 
                         },
                         boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 3 */
-                    },`).join(",\n")}
+                    },`).join("\n")}
                     `
                 }
             })
@@ -188,7 +188,7 @@ export class DefaultActionsTemplate {
                             return newExpression;
                         },
                         boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 4  ${subClass.name} */
-                    },`).join(",\n")}
+                    },`).join("\n")}
                     `
                 }
             })
