@@ -1,6 +1,12 @@
 import { flatten } from "lodash";
 import { Names, PathProvider, PROJECTITCORE, LANGUAGE_GEN_FOLDER } from "../../../utils";
-import { PiLanguage, PiBinaryExpressionConcept, PiExpressionConcept, PiConcept } from "../../../languagedef/metalanguage/PiLanguage";
+import {
+    PiLanguage,
+    PiBinaryExpressionConcept,
+    PiExpressionConcept,
+    PiConcept,
+    PiClassifier
+} from "../../../languagedef/metalanguage/PiLanguage";
 import { Roles } from "../../../utils/Roles";
 import { PiEditUnit } from "../../metalanguage";
 import { PiLangUtil } from "../../../languagedef/metalanguage/PiLangUtil";
@@ -137,6 +143,9 @@ export class DefaultActionsTemplate {
 
     customActionForParts(language: PiLanguage, editorDef: PiEditUnit): string {
         let result = "";
+        const behaviorMap = new ActionMap();
+        let behaviorDescriptor: BehaviorDescription[] = [];
+        // All listy properties
         language.concepts.forEach(concept => concept.allParts().filter(ref => ref.isList).forEach(part => {
             const childConcept = part.type.referred;
             // const trigger = !!conceptEditor.trigger ? conceptEditor.trigger : part.unitName
@@ -152,47 +161,42 @@ export class DefaultActionsTemplate {
                         },
                         boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 2 */
                     },`).join("\n")}
-                    `
-            if (childConcept instanceof PiConcept) {
-                const conceptEditor = editorDef.findConceptEditor(childConcept);
-            } else { // TODO child is PiInterface
-                result += `${PiLangUtil.subConceptsIncludingSelf(childConcept).filter(cls => !cls.isAbstract).map(subClass => `
-                   {
-                        activeInBoxRoles: ["${Roles.newConceptPart(concept, part)}"],
-                        trigger: "${editorDef.findConceptEditor(subClass).trigger}", // for Interface part
-                        action: (box: Box, trigger: PiTriggerType, ed: PiEditor): PiElement | null => {
-                            const parent = box.element;
-                            const newExpression = new ${Names.concept(subClass)}();
-                            parent[(box as AliasBox).propertyName].push(newExpression);
-                            return newExpression;
-
-                        },
-                        boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 3 */
-                    },`).join("\n")}
-                    `
-                }
+                    `;
             })
         );
+        // All NON listy properties
         language.concepts.forEach(concept => concept.allParts().filter(ref => !ref.isList).forEach(part => {
-                const childConcept = part.type.referred;
-                if (childConcept instanceof PiConcept) {
-                    const conceptEditor = editorDef.findConceptEditor(childConcept);
-                    result += `${PiLangUtil.subConceptsIncludingSelf(childConcept).filter(cls => !cls.isAbstract).map(subClass => `
-                    {
-                        activeInBoxRoles: ["${Roles.newConceptPart(concept, part)}"],
-                        trigger: "${editorDef.findConceptEditor(subClass).trigger}",  // for single Concept part
-                        action: (box: Box, trigger: PiTriggerType, ed: PiEditor): PiElement | null => {
-                            const parent = box.element;
-                            const newExpression = new ${Names.concept(subClass)}();
-                            parent[(box as AliasBox).propertyName] = newExpression;
-                            return newExpression;
-                        },
-                        boxRoleToSelect: "${this.cursorLocation(editorDef, subClass)}" /* CURSOR 4  ${subClass.name} */
-                    },`).join("\n")}
-                    `
+                const childClassifier = part.type.referred;
+                if (childClassifier instanceof PiConcept) {
+                    PiLangUtil.subConceptsIncludingSelf(childClassifier).filter(cls => !cls.isAbstract).forEach(subClass => {
+                        behaviorMap.createOrAdd(subClass,
+                            {
+                                    activeInBoxRoles: [`${Roles.newConceptPart(concept, part)}`],
+                                    trigger: `${editorDef.findConceptEditor(subClass).trigger}`,  // for single Concept part
+                                    action: `(box: Box, trigger: PiTriggerType, ed: PiEditor): PiElement | null => {
+                                                    const parent = box.element;
+                                                    const newExpression = new ${Names.concept(subClass)}();
+                                                    parent[(box as AliasBox).propertyName] = newExpression;
+                                                    return newExpression;
+                                              }`,
+                                    boxRoleToSelect: `${this.cursorLocation(editorDef, subClass)}` /* CURSOR 4  ${subClass.name} */
+                                }
+                        );
+                    });
                 }
-            })
-        );
+            }));
+        for (const elem of behaviorMap.map.values()) {
+            console.log("FOUND "+ elem.trigger + " roles: " + elem.activeInBoxRoles.length + " ==> " + elem.activeInBoxRoles);
+            result += `
+                    {
+                        activeInBoxRoles: [${elem.activeInBoxRoles.map(role => `"${role}"`).join(",")}],
+                        trigger: "${elem.trigger}",  // for single Concept part
+                        action: ${elem.action},
+                        boxRoleToSelect: "${elem.boxRoleToSelect}" /* CURSOR 4 */
+                    },
+                    `;
+        }
+
         return result;
     }
 
@@ -213,3 +217,25 @@ export class DefaultActionsTemplate {
     }
 }
 
+class BehaviorDescription {
+    activeInBoxRoles: string[];
+    trigger: string;
+    action: string;
+    boxRoleToSelect: string;
+}
+
+/**
+ * Keeps a map of all actions, ensuring that identical actions with different triggers are joined.
+ */
+class ActionMap {
+    map: Map<string, BehaviorDescription> = new Map<string, BehaviorDescription>();
+
+    createOrAdd(classifier: PiClassifier, bd: BehaviorDescription): void {
+        let found: BehaviorDescription = this.map.get(classifier.name);
+        if( !!found){
+            found.activeInBoxRoles = found.activeInBoxRoles.concat(...bd.activeInBoxRoles);
+        } else {
+            this.map.set(classifier.name, bd)
+        }
+    }
+}
