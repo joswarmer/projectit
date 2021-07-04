@@ -5,7 +5,7 @@ import { Box } from "../editor/boxes/Box";
 import { HorizontalListBox, isHorizontalBox } from "../editor/boxes/ListBox";
 import { SelectBox } from "../editor/boxes/SelectBox";
 import { SelectOption } from "../editor/boxes/SelectOption";
-import { PiEditor } from "../editor/PiEditor";
+import { IPiEditor } from "../editor/IPiEditor";
 import { PiBinaryExpression, PiExpression } from "../language/PiModel";
 import { PiProjection } from "../editor/PiProjection";
 import {
@@ -48,7 +48,7 @@ export function createDefaultExpressionBox(exp: PiExpression, role: string, chil
     }
 }
 
-export function createDefaultBinaryBox(projection: PiProjection, exp: PiBinaryExpression, symbol: string, editor: PiEditor, style?: string): HorizontalListBox {
+export function createDefaultBinaryBox(projection: PiProjection, exp: PiBinaryExpression, symbol: string, editor: IPiEditor, style?: string): HorizontalListBox {
     const result = new HorizontalListBox(exp, BINARY_EXPRESSION);
     const projectionToUse = !!projection.rootProjection ? projection.rootProjection : projection;
 
@@ -73,7 +73,7 @@ export function createDefaultBinaryBox(projection: PiProjection, exp: PiBinaryEx
  * @param symbol
  * @param style
  */
-export function createOperatorBox(editor: PiEditor, exp: PiBinaryExpression, symbol: string, style?: string): Box {
+export function createOperatorBox(editor: IPiEditor, exp: PiBinaryExpression, symbol: string, style?: string): Box {
     const operatorBox = new SelectBox(
         exp,
         EXPRESSION_SYMBOL,

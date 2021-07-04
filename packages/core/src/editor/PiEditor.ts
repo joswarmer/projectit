@@ -1,22 +1,28 @@
-import { observable, computed, action } from "mobx";
-import { MobxModelElementImpl } from "../language/decorators";
+import { action, computed, observable } from "mobx";
 
-import { PiContainerDescriptor, PiExpression } from "../language/PiModel";
-import { InternalBehavior, InternalBinaryBehavior, InternalCustomBehavior, InternalExpressionBehavior } from "./InternalBehavior";
+import { PiContainerDescriptor, PiElement } from "../language/PiModel";
 import { PiCaret } from "../util/BehaviorUtils";
-import { PiElement, isPiExpression } from "../language/PiModel";
-import { PiProjection } from "./PiProjection";
+import { PiLogger } from "../util/PiLogging";
 import { isAliasBox } from "./boxes/AliasBox";
+import { Box } from "./boxes/Box";
 import { isSelectBox } from "./boxes/SelectBox";
 import { isTextBox } from "./boxes/TextBox";
-import { Box } from "./boxes/Box";
+import {
+    InternalBehavior,
+    InternalBinaryBehavior,
+    InternalCustomBehavior,
+    InternalExpressionBehavior
+} from "./InternalBehavior";
+import { IPiEditor } from "./IPiEditor";
 import { KeyboardShortcutBehavior, PiActions } from "./PiAction";
-import { PiLogger } from "../util/PiLogging";
-import { PiUtils, wait } from "../util/PiUtils";
+import { PiProjection } from "./PiProjection";
+// TODO  Remove this circular dependency in a better way
+// import { wait } from "../util/PiUtils";
+const wait = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const LOGGER = new PiLogger("PiEditor").mute();
 
-export class PiEditor {
+export class PiEditor implements IPiEditor {
     @observable private _rootElement: PiElement;
     readonly actions?: PiActions;
     readonly projection: PiProjection;
@@ -37,7 +43,7 @@ export class PiEditor {
         this.initializeAliases(actions);
     }
 
-    initializeAliases(actions?: PiActions) {
+    private initializeAliases(actions?: PiActions) {
         if (!actions) {
             return;
         }

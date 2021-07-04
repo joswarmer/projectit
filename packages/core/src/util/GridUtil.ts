@@ -1,7 +1,7 @@
 import { AliasBox, Box, HorizontalListBox, LabelBox, NBSP } from "../";
 import { GridBox, GridCell } from "../editor/boxes/GridBox";
 import { KeyboardShortcutBehavior } from "../editor/PiAction";
-import { PiEditor } from "../editor/PiEditor";
+import { IPiEditor } from "../editor/IPiEditor";
 import { PiElement } from "../language/PiModel";
 import { PiKey } from "../util/Keys";
 import * as Keys from "../util/Keys";
@@ -20,8 +20,8 @@ export class GridUtil {
         list: ELEMENT_TYPE[],
         columnNames: string[],
         columnBoxes: ((e: ELEMENT_TYPE) => Box)[],
-        builder: (box: Box, editor: PiEditor) => ELEMENT_TYPE,
-        editor: PiEditor,
+        builder: (box: Box, editor: IPiEditor) => ELEMENT_TYPE,
+        editor: IPiEditor,
         initializer?: Partial<GridBox>
     ): Box {
         PiUtils.CHECK(element[listPropertyName] === list, "createCollectionRowGrid: listPropertyname should result in the list");
@@ -70,8 +70,8 @@ export class GridUtil {
         list: ELEMENT_TYPE[],
         columnNames: string[],
         columnBoxes: ((e: ELEMENT_TYPE) => Box)[],
-        builder: (box: Box, editor: PiEditor) => ELEMENT_TYPE,
-        editor: PiEditor,
+        builder: (box: Box, editor: IPiEditor) => ELEMENT_TYPE,
+        editor: IPiEditor,
         initializer?: Partial<GridBox>
     ): Box {
         const cells: GridCell[] = [];
@@ -106,14 +106,14 @@ export class GridUtil {
     public static createKeyboardShortcutForCollectionGrid<ELEMENT_TYPE extends PiElement>(
         container: PiElement,
         collectionRole: string,
-        elementCreator: (box: Box, editor: PiEditor) => ELEMENT_TYPE,
+        elementCreator: (box: Box, editor: IPiEditor) => ELEMENT_TYPE,
         roleToSelect?: string
     ): KeyboardShortcutBehavior {
         const listKeyboardShortcut: KeyboardShortcutBehavior = {
             trigger: { meta: MetaKey.None, keyCode: Keys.ENTER },
             // TODO The new-0... should become more generic.
             activeInBoxRoles: ["new-0", "new-1", "new-2", "new-3", "new-4", "new-5", "new-6", "new-7", "new-8", "new-9", "new-10"],
-            action: async (box: Box, key: PiKey, editor: PiEditor): Promise<PiElement> => {
+            action: async (box: Box, key: PiKey, editor: IPiEditor): Promise<PiElement> => {
                 const element = box.element;
                 const proc = element.piContainer();
                 const parent: PiElement = proc.container;
@@ -137,13 +137,13 @@ export class GridUtil {
     public static createKeyboardShortcutForEmptyCollectionGrid<ELEMENT_TYPE extends PiElement>(
         container: PiElement,
         propertyRole: string,
-        elementCreator: (box: Box, editor: PiEditor) => ELEMENT_TYPE,
+        elementCreator: (box: Box, editor: IPiEditor) => ELEMENT_TYPE,
         roleToSelect?: string
     ): KeyboardShortcutBehavior {
         const listKeyboardShortcut: KeyboardShortcutBehavior = {
             trigger: { meta: MetaKey.None, keyCode: Keys.ENTER },
             activeInBoxRoles: ["alias-add-row"],
-            action: async (box: Box, key: PiKey, editor: PiEditor): Promise<PiElement> => {
+            action: async (box: Box, key: PiKey, editor: IPiEditor): Promise<PiElement> => {
                 const element = box.element;
                 const newElement: ELEMENT_TYPE = elementCreator(box, editor);
                 element[propertyRole].push(newElement);
