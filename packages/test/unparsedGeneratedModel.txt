@@ -1,0 +1,102 @@
+DSmodel modelOfDepth2 
+    units 
+        DSunit unit1_OF_model 
+            dsPublics 
+                DSpublic public2_OF_unit1_OF_model 
+                    conceptParts 
+                        DSpublic public3_OF_public2_OF_unit1_OF_model 
+                            conceptParts 
+                                DSpublic public4_OF_public3_OF_public2_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptPrivates 
+                                DSprivate private5_OF_public3_OF_public2_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptRefs 
+
+                    conceptPrivates 
+                        DSprivate private6_OF_public2_OF_unit1_OF_model 
+                            conceptParts 
+                                DSpublic public7_OF_private6_OF_public2_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptPrivates 
+                                DSprivate private8_OF_private6_OF_public2_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptRefs 
+
+                    conceptRefs 
+                        private12_OF_public10_OF_private9_OF_unit1_OF_model
+                        public11_OF_public10_OF_private9_OF_unit1_OF_model
+                        public7_OF_private6_OF_public2_OF_unit1_OF_model
+                        private6_OF_public2_OF_unit1_OF_model
+            dsPrivates 
+                DSprivate private9_OF_unit1_OF_model 
+                    conceptParts 
+                        DSpublic public10_OF_private9_OF_unit1_OF_model 
+                            conceptParts 
+                                DSpublic public11_OF_public10_OF_private9_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptPrivates 
+                                DSprivate private12_OF_public10_OF_private9_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptRefs 
+
+                    conceptPrivates 
+                        DSprivate private13_OF_private9_OF_unit1_OF_model 
+                            conceptParts 
+                                DSpublic public14_OF_private13_OF_private9_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptPrivates 
+                                DSprivate private15_OF_private13_OF_private9_OF_unit1_OF_model 
+                                    conceptParts 
+                                        
+                                    conceptPrivates 
+                                        
+                                    conceptRefs 
+
+                            conceptRefs 
+
+                    conceptRefs 
+                        public14_OF_private13_OF_private9_OF_unit1_OF_model
+                        private13_OF_private9_OF_unit1_OF_model
+                        private9_OF_unit1_OF_model
+                        private8_OF_private6_OF_public2_OF_unit1_OF_model
+            imports 
+                
+            dsRefs 
+                private15_OF_private13_OF_private9_OF_unit1_OF_model
+                public10_OF_private9_OF_unit1_OF_model
