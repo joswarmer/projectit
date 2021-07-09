@@ -1,11 +1,11 @@
 import { CommandLineParser, CommandLineFlagParameter } from "@rushstack/ts-command-line";
-import { ProjectItGenerateLanguage } from "./ProjectItGenerateLanguage";
-import { ProjectItGenerateAllAction } from "./ProjectItGenerateAllAction";
-import { ProjectItGenerateEditor } from "./ProjectItGenerateEditor";
-import { ProjectItGenerateScoper } from "./ProjectItGenerateScoper";
-import { ProjectItGenerateValidator } from "./ProjectItGenerateValidator";
-import { ProjectItGenerateTyper } from "./ProjectItGenerateTyper";
-import { MetaLogger } from "../utils/MetaLogger";
+import { ProjectItGenerateLanguage } from "./ProjectItGenerateLanguage.js";
+import { ProjectItGenerateAllAction } from "./ProjectItGenerateAllAction.js";
+import { ProjectItGenerateEditor } from "./ProjectItGenerateEditor.js";
+import { ProjectItGenerateScoper } from "./ProjectItGenerateScoper.js";
+import { ProjectItGenerateValidator } from "./ProjectItGenerateValidator.js";
+import { ProjectItGenerateTyper } from "./ProjectItGenerateTyper.js";
+import { MetaLogger } from "../utils/MetaLogger.js";
 
 const LOGGER = new MetaLogger("ProjectItParser"); // .mute();
 

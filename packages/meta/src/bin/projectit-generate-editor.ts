@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require('../commandline/projectit');
+// require('../commandline/projectit');
+import '../commandline/projectit.js'
+

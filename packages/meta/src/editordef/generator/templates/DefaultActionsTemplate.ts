@@ -1,4 +1,5 @@
-import { flatten } from "lodash";
+import pkg from "lodash";
+const { flatten } = pkg;
 import { Names, PROJECTITCORE, LANGUAGE_GEN_FOLDER } from "../../../utils";
 import { PiLanguage, PiBinaryExpressionConcept, PiExpressionConcept, PiConcept, PiClassifier } from "../../../languagedef/metalanguage";
 import { Roles, LangUtil } from "../../../utils";

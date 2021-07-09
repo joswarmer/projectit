@@ -1,10 +1,12 @@
 import * as fs from "fs";
-import parserTypeScript = require("prettier/parser-typescript");
+import * as parserTypeScript from "prettier/parser-typescript";
+// import parserTypeScript = require("prettier/parser-typescript");
 import { MetaLogger } from "../utils/MetaLogger";
 
+// const prettier = require("prettier/standalone");
+import * as  prettier from "prettier/standalone";
+import * as path from "path";
 const LOGGER = new MetaLogger("FileHelpers").mute();
-const prettier = require("prettier/standalone");
-const path = require("path");
 
 export class GenerationStatus {
     numberOfErrors: number = 0;

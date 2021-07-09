@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "dist",
     "allowJs": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "esModuleInterop": true
   },
   "include": [
     "src"

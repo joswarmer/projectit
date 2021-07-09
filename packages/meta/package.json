@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/joswarmer/ProjectIt.git"
   },
+  "type": "module",
   "bin": {
     "projectit": "dist/bin/projectit-generate-editor.js"
   },

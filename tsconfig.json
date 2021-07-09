@@ -10,7 +10,7 @@
       "es6",
       "es2016.array.include"
     ],
-    "module": "commonjs",
+    "module": "ES6",
     "moduleResolution": "node",
     "noEmit": false,
     "noEmitOnError": true,
@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": false,
-    "target": "es6",
+    "target": "ES6",
     "types": [
       "node",
       "jest"

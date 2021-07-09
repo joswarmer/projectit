@@ -12,6 +12,7 @@
     "clean": "rm src/example/*/*/*.js && rm src/example/*/*/*.js.map",
     "example": 	    "bash ../../scripts/projectit-dev.sh all -d src/example/defs -o src/example"
   },
+  "type": "module",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
