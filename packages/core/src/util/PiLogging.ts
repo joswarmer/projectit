@@ -51,7 +51,7 @@ export class PiLogger {
     }
 
     mute(): PiLogger {
-        this.active = false;
+        // this.active = false;
         return this;
     }
 
